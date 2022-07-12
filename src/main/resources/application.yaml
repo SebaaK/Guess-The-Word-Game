@@ -11,4 +11,4 @@ spring:
     default-property-inclusion: non_null
 
 game:
-  difficultyLevelChanger: 6
+  difficultyLevelThreshold: 6

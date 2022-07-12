@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class WordChecker {
 
-    @Value("${game.difficultyLevelChanger:6}")
-    private int difficultyLevelChanger;
+    @Value("${game.difficultyLevelThreshold:6}")
+    private int difficultyLevelThreshold;
 
     public WordDifficulty getDifficulty(String word) {
-        return word.length() <= difficultyLevelChanger ? WordDifficulty.EASY : WordDifficulty.HARD;
+        return word.length() <= difficultyLevelThreshold ? WordDifficulty.EASY : WordDifficulty.HARD;
     }
 }
