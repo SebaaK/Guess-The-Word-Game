@@ -20,11 +20,13 @@ import java.util.Scanner;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-class InitialData {
+class InitialDataLoader {
 
     @Value("${csvData.fileName:words.csv}")
     private String fileName;
+
     private final WordRepository wordRepository;
+    private final WordChecker wordChecker;
 
     @EventListener
     public void setUpData(ApplicationReadyEvent event) {
@@ -43,6 +45,6 @@ class InitialData {
     }
 
     private Word completeEntityToSave(String[] splitRow) {
-        return new Word(Long.parseLong(splitRow[0]), splitRow[1], WordDifficulty.valueOf(splitRow[2]), splitRow[3].getBytes());
+        return new Word(Long.parseLong(splitRow[0]), splitRow[1], wordChecker.getDifficulty(splitRow[1]), splitRow[2].getBytes());
     }
 }
