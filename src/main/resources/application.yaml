@@ -9,3 +9,6 @@ spring:
       ddl-auto: create-drop
   jackson:
     default-property-inclusion: non_null
+
+game:
+  difficultyLevelThreshold: 6
