@@ -1,5 +1,6 @@
 package kots.service;
 
+import kots.domain.WordDifficulty;
 import kots.model.Word;
 import kots.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.Scanner;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-class InitialDataFromFile {
+class InitialData {
 
     @Value("${csvData.fileName:words.csv}")
     private String fileName;
@@ -36,12 +37,12 @@ class InitialDataFromFile {
             }
             rowScanner.close();
         } catch (FileNotFoundException e) {
-            log.warn(e.getMessage());
+            log.warn("Initial data error service: " + e.getMessage());
         }
         wordRepository.saveAll(wordList);
     }
 
     private Word completeEntityToSave(String[] splitRow) {
-        return new Word(Long.parseLong(splitRow[0]), splitRow[1], splitRow[2].getBytes());
+        return new Word(Long.parseLong(splitRow[0]), splitRow[1], WordDifficulty.valueOf(splitRow[2]), splitRow[3].getBytes());
     }
 }
