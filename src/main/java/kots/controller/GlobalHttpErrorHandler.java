@@ -12,6 +12,6 @@ class GlobalHttpErrorHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<ResponseMessageDto> incorrectFileTypeException(ObjectNotFoundException exception) {
-        return new ResponseEntity(new ResponseMessageDto(exception.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
