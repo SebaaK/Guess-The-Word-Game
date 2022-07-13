@@ -1,6 +1,10 @@
 package kots.config.security;
 
+<<<<<<< HEAD
 import kots.service.JWTManager;
+=======
+import kots.service.JWTManagement;
+>>>>>>> Minor corrections about deprecated WebSecurityConfigurerAdapter
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
