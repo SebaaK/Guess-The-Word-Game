@@ -54,6 +54,11 @@ class InitialDataLoader {
         userService.saveRole(new Role(1L, "USER"));
         userService.saveUser(new User(1L, "sebastian", passwordEncoder.encode("password"), new ArrayList<>()));
         userService.addRoleToUser("sebastian", "USER");
+
+        userService.saveRole(new Role(2L, "ADMIN"));
+        userService.saveUser(new User(2L, "sebastian_admin", passwordEncoder.encode("password"), new ArrayList<>()));
+        userService.addRoleToUser("sebastian_admin", "ADMIN");
+        userService.addRoleToUser("sebastian_admin", "USER");
     }
 
     private Word completeEntityToSave(String[] splitRow) {
