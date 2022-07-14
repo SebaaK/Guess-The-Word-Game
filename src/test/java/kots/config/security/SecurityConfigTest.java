@@ -52,7 +52,7 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void shouldLoginAndGetContent() throws Exception {
+    public void shouldLoginAndGetContent() throws Exception {
         // given
         userService.saveRole(new Role(1L, "USER"));
         userService.saveUser(new User(1L, "testUser", passwordEncoder.encode("password"), new HashSet<>()));
@@ -76,7 +76,7 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void shouldReceiveStatusUnauthorizedWhenNoAuthorize() throws Exception {
+    public void shouldReceiveStatusUnauthorizedWhenNoAuthorize() throws Exception {
         mockMvc.perform(get(WORDS_BASE_ENDPOINT))
                 .andExpect(status().isUnauthorized());
     }
