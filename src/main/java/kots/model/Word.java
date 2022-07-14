@@ -2,6 +2,7 @@ package kots.model;
 
 import kots.domain.WordDifficulty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "words")
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Word {
 
     @Id
