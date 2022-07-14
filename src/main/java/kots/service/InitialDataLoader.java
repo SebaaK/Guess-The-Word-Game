@@ -56,7 +56,7 @@ class InitialDataLoader {
         userService.addRoleToUser("sebastian", "USER");
 
         userService.saveRole(new Role(2L, "ADMIN"));
-        userService.saveUser(new User(2L, "sebastian_admin", passwordEncoder.encode("password"), new ArrayList<>()));
+        userService.saveUser(new User(2L, "sebastian_admin", passwordEncoder.encode("password"), new HashSet<>()));
         userService.addRoleToUser("sebastian_admin", "ADMIN");
     }
 

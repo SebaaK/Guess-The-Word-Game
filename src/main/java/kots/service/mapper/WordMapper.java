@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 public class WordMapper {
 
     public static WordMetadataDto toWordMetadataDto(final Word word) {
-        return new WordMetadataDto(word.getWord(), word.getDifficulty());
+        return new WordMetadataDto(word.getWord(), word.getDifficulty().toString());
     }
 
     public static List<WordMetadataDto> toWordMetadataDto(final Iterable<Word> wordList) {
