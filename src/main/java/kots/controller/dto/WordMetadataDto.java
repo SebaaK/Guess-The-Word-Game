@@ -8,7 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class WordMetadataDto {
 
-    private Long id;
     private String word;
     private WordDifficulty difficulty;
 }
