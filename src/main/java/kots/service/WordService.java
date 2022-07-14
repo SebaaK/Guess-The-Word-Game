@@ -4,6 +4,7 @@ import kots.controller.dto.WordFileDownloadDto;
 import kots.controller.dto.WordMetadataDto;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
+import kots.exception.ProcessedFileException;
 import kots.exception.WordNameIsExistException;
 import kots.model.Word;
 import kots.repository.WordRepository;
@@ -24,13 +25,18 @@ public class WordService {
     private final WordRepository wordRepository;
     private final WordChecker wordChecker;
 
-    public WordMetadataDto store(MultipartFile file, String wordName) throws IOException {
+    public WordMetadataDto store(MultipartFile file, String wordName) {
         checkWordNameIsFree(wordName);
-        Word word = Word.builder()
-                .word(wordName)
-                .difficulty(wordChecker.getDifficulty(wordName))
-                .voice(checkIfWordFileExists(file).getBytes())
-                .build();
+        Word word = null;
+        try {
+            word = Word.builder()
+                    .word(wordName)
+                    .difficulty(wordChecker.getDifficulty(wordName))
+                    .voice(checkIfWordFileExists(file).getBytes())
+                    .build();
+        } catch (IOException e) {
+            throw new ProcessedFileException("Cannot processed this file");
+        }
         return toWordMetadataDto(wordRepository.save(word));
     }
 

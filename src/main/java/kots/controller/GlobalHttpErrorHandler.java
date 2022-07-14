@@ -1,6 +1,7 @@
 package kots.controller;
 
 import kots.controller.dto.ResponseMessageDto;
+import kots.exception.ProcessedFileException;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
 import kots.exception.WordNameIsExistException;
@@ -31,5 +32,10 @@ class GlobalHttpErrorHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ResponseMessageDto> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException exception) {
         return new ResponseEntity<>(new ResponseMessageDto("File size is too large. Max size: " + exception.getMaxUploadSize()), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(ProcessedFileException.class)
+    public ResponseEntity<ResponseMessageDto> handleProcessedFileException(ProcessedFileException exception) {
+        return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
