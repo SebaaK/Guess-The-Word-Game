@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:JC_GWG
+
+jwt:
+  expiration: 60
+  secret: test_secret_code
