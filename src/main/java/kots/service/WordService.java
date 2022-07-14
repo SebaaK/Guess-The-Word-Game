@@ -38,13 +38,13 @@ public class WordService {
         return toWordMetadataDto(wordRepository.findAll());
     }
 
-    public WordFileDownloadDto getWord(long id) {
-        Word word = getSingleWord(id);
+    public WordFileDownloadDto getWord(String wordName) {
+        Word word = getSingleWord(wordName);
         return new WordFileDownloadDto(word.getWord(), new ByteArrayResource(word.getVoice()));
     }
 
-    public void deleteWord(long id) {
-        wordRepository.delete(getSingleWord(id));
+    public void deleteWord(String wordName) {
+        wordRepository.delete(getSingleWord(wordName));
     }
 
     private void checkWordNameIsFree(String wordName) {
@@ -52,8 +52,8 @@ public class WordService {
             throw new WordNameIsExistException("That word name is already exist");
     }
 
-    private Word getSingleWord(long id) {
-        return wordRepository.findById(id)
+    private Word getSingleWord(String wordName) {
+        return wordRepository.findByWord(wordName)
                 .orElseThrow(() -> new ObjectNotFoundException("Word not found"));
     }
 

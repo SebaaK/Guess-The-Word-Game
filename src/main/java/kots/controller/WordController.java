@@ -33,9 +33,9 @@ public class WordController {
         return ResponseEntity.ok(wordService.getWords());
     }
 
-    @GetMapping(value = "/{id}", produces = "audio/mpeg")
-    public ResponseEntity<Resource> getWordFile(@PathVariable long id) {
-        WordFileDownloadDto wordDto = wordService.getWord(id);
+    @GetMapping(value = "/{wordName}", produces = "audio/mpeg")
+    public ResponseEntity<Resource> getWordFile(@PathVariable String wordName) {
+        WordFileDownloadDto wordDto = wordService.getWord(wordName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wordDto.getName() + ".mp3\"")
                 .body(wordDto.getSoundFile());
@@ -48,10 +48,10 @@ public class WordController {
         return ResponseEntity.status(HttpStatus.CREATED).body(wordService.store(file, wordName));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{wordName}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deleteWord(@PathVariable long id) {
-        wordService.deleteWord(id);
+    public ResponseEntity<?> deleteWord(@PathVariable String wordName) {
+        wordService.deleteWord(wordName);
         return ResponseEntity.noContent().build();
     }
 }
