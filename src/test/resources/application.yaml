@@ -5,6 +5,7 @@ spring:
 jwt:
   expiration: 60
 <<<<<<< HEAD
+<<<<<<< HEAD
   secret: test_secret_code
 
 game:
@@ -12,3 +13,9 @@ game:
 =======
   secret: test_secret_code
 >>>>>>> Test for authorization
+=======
+  secret: test_secret_code
+
+game:
+  difficultyLevelThreshold: 6
+>>>>>>> Finish tests in WordController
