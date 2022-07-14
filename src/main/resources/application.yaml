@@ -6,9 +6,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   jackson:
     default-property-inclusion: non_null
 
 game:
   difficultyLevelThreshold: 6
+
+jwt:
+  secret: long_secret_code
+  expiration: 60
