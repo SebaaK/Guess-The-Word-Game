@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -53,6 +54,30 @@ public class WordControllerTest {
     @BeforeEach
     void cleanUp() {
         wordRepository.deleteAll();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void shouldReceiveUnauthorizedStatusWhenQueryEndpointAnonymousUser() throws Exception {
+        // given
+        generateWordsData(5);
+        String wordName = TEST_FILE + 1;
+
+        // when & then
+        mockMvc.perform(get(WORDS_BASE_ENDPOINT))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(get(WORDS_BASE_ENDPOINT + wordName))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(multipart(WORDS_BASE_ENDPOINT)
+                        .file(generateMockFile("TestFile.mp3", "audio/mpeg"))
+                        .param("wordName", "TestWordName")
+                )
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(delete(WORDS_BASE_ENDPOINT + wordName))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
