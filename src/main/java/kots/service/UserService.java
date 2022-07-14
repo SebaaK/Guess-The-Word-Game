@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 
-import static kots.service.mapper.RoleMapper.toRoleDto;
+import static kots.service.mapper.RoleMapper.toRoleDtos;
 import static kots.service.mapper.UserMapper.toUserDto;
 
 @Service
@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     }
 
     public RoleDto saveRole(Role role) {
-        return toRoleDto(roleRepository.save(role));
+        return toRoleDtos(roleRepository.save(role));
     }
 
     @Transactional

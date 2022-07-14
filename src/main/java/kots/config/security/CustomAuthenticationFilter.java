@@ -1,7 +1,7 @@
 package kots.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kots.service.JWTManagement;
+import kots.service.JWTManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final JWTManagement jwtManagement;
+    private final JWTManager jwtManager;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -40,7 +40,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User) authentication.getPrincipal();
         response.setContentType(APPLICATION_JSON_VALUE);
         Map<String, String> token = new HashMap<>();
-        token.put("token", jwtManagement.generateToken(user));
+        token.put("token", jwtManager.generateToken(user));
         new ObjectMapper().writeValue(response.getOutputStream(), token);
     }
 }

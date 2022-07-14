@@ -1,6 +1,5 @@
 package kots.service;
 
-import kots.domain.WordDifficulty;
 import kots.model.Role;
 import kots.model.User;
 import kots.model.Word;
@@ -17,6 +16,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,7 +52,7 @@ class InitialDataLoader {
     @EventListener
     public void setUpUsersAndRolesData(ApplicationReadyEvent event) {
         userService.saveRole(new Role(1L, "USER"));
-        userService.saveUser(new User(1L, "sebastian", passwordEncoder.encode("password"), new ArrayList<>()));
+        userService.saveUser(new User(1L, "sebastian", passwordEncoder.encode("password"), new HashSet<>()));
         userService.addRoleToUser("sebastian", "USER");
     }
 

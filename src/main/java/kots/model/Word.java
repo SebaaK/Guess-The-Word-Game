@@ -1,6 +1,5 @@
 package kots.model;
 
-import kots.domain.WordDifficulty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

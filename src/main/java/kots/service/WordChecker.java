@@ -1,6 +1,6 @@
 package kots.service;
 
-import kots.domain.WordDifficulty;
+import kots.model.WordDifficulty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

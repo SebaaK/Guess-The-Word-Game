@@ -1,8 +1,9 @@
 package kots.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kots.service.JWTManagement;
+import kots.service.JWTManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,11 +20,12 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequiredArgsConstructor
+@Log4j2
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    private final JWTManagement jwtManagement;
+    private final JWTManager jwtManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -31,7 +33,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if(authorization != null && authorization.startsWith(TOKEN_PREFIX)) {
             try {
                 String token = authorization.replace(TOKEN_PREFIX, "");
-                SecurityContextHolder.getContext().setAuthentication(jwtManagement.validateToken(token));
+                SecurityContextHolder.getContext().setAuthentication(jwtManager.validateToken(token));
                 filterChain.doFilter(request, response);
             } catch (Exception e) {
                 Map<String, String> error = new HashMap<>();
@@ -39,6 +41,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 response.setStatus(FORBIDDEN.value());
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
+                log.warn("Error while authorization filter. Message: {}", e.getMessage());
             }
         } else {
             filterChain.doFilter(request, response);

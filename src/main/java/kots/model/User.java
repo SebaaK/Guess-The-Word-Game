@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -31,5 +33,5 @@ public class User {
             joinColumns = { @JoinColumn(name = "userId", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "rolesId", referencedColumnName = "id")}
     )
-    private Collection<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 }

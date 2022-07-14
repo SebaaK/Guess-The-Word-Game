@@ -1,6 +1,6 @@
 package kots.config.security;
 
-import kots.service.JWTManagement;
+import kots.service.JWTManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 class SecurityConfig {
 
-    private final JWTManagement jwtManagement;
+    private final JWTManager jwtManager;
     private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
@@ -31,8 +31,8 @@ class SecurityConfig {
         http.authorizeRequests().antMatchers("/login").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-        http.addFilter(new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtManagement));
-        http.addFilterBefore(new CustomAuthorizationFilter(jwtManagement), UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtManager));
+        http.addFilterBefore(new CustomAuthorizationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -42,7 +42,7 @@ class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

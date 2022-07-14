@@ -8,13 +8,13 @@ import java.util.List;
 
 public class RoleMapper {
 
-    public static RoleDto toRoleDto(final Role role) {
+    public static RoleDto toRoleDtos(final Role role) {
         return new RoleDto(role.getId(), role.getName());
     }
 
-    public static List<RoleDto> toRoleDto(final Collection<Role> roles) {
+    public static List<RoleDto> toRoleDtos(final Collection<Role> roles) {
         return roles.stream()
-                .map(RoleMapper::toRoleDto)
+                .map(RoleMapper::toRoleDtos)
                 .toList();
     }
 }

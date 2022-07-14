@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JWTManagement {
+public class JWTManager {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -27,7 +27,7 @@ public class JWTManagement {
     public String generateToken(User user) {
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 1000 * expiration))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60L * 1000 * expiration))
                 .withClaim("roles", getRolesAsStringList(user.getAuthorities()))
                 .sign(getAlgorithm());
     }
