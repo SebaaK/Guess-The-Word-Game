@@ -3,8 +3,8 @@ package kots.service.mapper;
 import kots.controller.dto.RoleDto;
 import kots.model.Role;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RoleMapper {
 
@@ -12,9 +12,9 @@ public class RoleMapper {
         return new RoleDto(role.getId(), role.getName());
     }
 
-    public static List<RoleDto> toRoleDtos(final Collection<Role> roles) {
+    public static Set<RoleDto> toRoleDtos(final Set<Role> roles) {
         return roles.stream()
                 .map(RoleMapper::toRoleDtos)
-                .toList();
+                .collect(Collectors.toSet());
     }
 }
