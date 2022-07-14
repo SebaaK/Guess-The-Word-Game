@@ -27,17 +27,16 @@ public class WordService {
 
     public WordMetadataDto store(MultipartFile file, String wordName) {
         checkWordNameIsFree(wordName);
-        Word word = null;
         try {
-            word = Word.builder()
+            Word word = Word.builder()
                     .word(wordName)
                     .difficulty(wordChecker.getDifficulty(wordName))
                     .voice(checkIfWordFileExists(file).getBytes())
                     .build();
+            return toWordMetadataDto(wordRepository.save(word));
         } catch (IOException e) {
             throw new ProcessedFileException("Cannot processed this file");
         }
-        return toWordMetadataDto(wordRepository.save(word));
     }
 
     public List<WordMetadataDto> getWords() {

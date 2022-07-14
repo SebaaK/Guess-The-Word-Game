@@ -44,7 +44,7 @@ public class WordController {
     @PostMapping(consumes = "multipart/form-data")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WordMetadataDto> uploadWord(@RequestParam MultipartFile file,
-                                                      @RequestParam("wordName") String wordName) throws IOException {
+                                                      @RequestParam("wordName") String wordName) {
         return ResponseEntity.status(HttpStatus.CREATED).body(wordService.store(file, wordName));
     }
 

@@ -5,3 +5,6 @@ spring:
 jwt:
   expiration: 60
   secret: test_secret_code
+
+game:
+  difficultyLevelThreshold: 6

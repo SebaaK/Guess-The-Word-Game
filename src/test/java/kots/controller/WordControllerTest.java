@@ -1,10 +1,9 @@
 package kots.controller;
 
 import kots.controller.dto.WordMetadataDto;
-import kots.model.Word;
+import kots.model.WordDifficulty;
 import kots.repository.WordRepository;
 import kots.service.WordService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,18 +14,19 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,6 +40,7 @@ public class WordControllerTest {
     public static final String WORDS_BASE_ENDPOINT = "/api/words/";
     public static final String TEST_FILE = "TestFile-";
     public static final byte[] FILE_IN_BYTES = "TestMusic".getBytes();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -64,7 +65,9 @@ public class WordControllerTest {
         mockMvc.perform(get(WORDS_BASE_ENDPOINT))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$", hasSize(wordsCount)));
+                .andExpect(jsonPath("$", hasSize(wordsCount)))
+                .andExpect(jsonPath("$[0].word", is(TEST_FILE + 1)))
+                .andExpect(jsonPath("$[0].difficulty", is(WordDifficulty.HARD.toString())));
     }
 
     @Test
@@ -78,6 +81,76 @@ public class WordControllerTest {
                 .andReturn().getResponse();
         assertThat(result.getContentType()).isEqualTo("audio/mpeg");
         assertThat(result.getContentAsByteArray()).isNotEmpty().isEqualTo(FILE_IN_BYTES);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWordIsNoExists() throws Exception {
+        mockMvc.perform(get(WORDS_BASE_ENDPOINT + "noExistWord"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("Word not found")));
+    }
+
+    @Test
+    public void shouldReceiveStatusForbiddenUserNoHaveAdminRoleWhenCreateNewWord() throws Exception {
+        mockMvc.perform(multipart(WORDS_BASE_ENDPOINT)
+                        .file(generateMockFile("file.mp3", MP3_MEDIA_TYPE))
+                        .param("wordName", "TestWord")
+                )
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void shouldCreateNewWord() throws Exception {
+        String testWord = "TestWord";
+        mockMvc.perform(multipart(WORDS_BASE_ENDPOINT)
+                        .file(generateMockFile("file.mp3", MP3_MEDIA_TYPE))
+                        .param("wordName", testWord)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.word", is(testWord)))
+                .andExpect(jsonPath("$.difficulty", is(WordDifficulty.HARD.toString())));
+        assertTrue(wordRepository.existsWordByWord(testWord));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void shouldReceiveConflictStatusWhenCreateNewWord() throws Exception {
+        // given
+        generateWordsData(1);
+
+        // when & then
+        mockMvc.perform(multipart(WORDS_BASE_ENDPOINT)
+                        .file(generateMockFile("file.mp3", MP3_MEDIA_TYPE))
+                        .param("wordName", TEST_FILE + 1)
+                )
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message", is("That word name is already exist")));
+    }
+
+    @Test
+    public void shouldReceiveStatusForbiddenUserNoHaveAdminRoleWhenDeleteWord() throws Exception {
+        // given
+        generateWordsData(1);
+
+        // when & then
+        String wordName = TEST_FILE + 1;
+        mockMvc.perform(delete(WORDS_BASE_ENDPOINT + wordName))
+                .andExpect(status().isForbidden());
+        assertTrue(wordRepository.existsWordByWord(wordName));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    public void shouldReceiveNoContentStatusWhenDeleteWord() throws Exception {
+        // given
+        generateWordsData(1);
+        String wordName = TEST_FILE + 1;
+
+        // when & then
+        mockMvc.perform(delete(WORDS_BASE_ENDPOINT + wordName))
+                .andExpect(status().isNoContent());
+        assertFalse(wordRepository.existsWordByWord(wordName));
     }
 
     private List<WordMetadataDto> generateWordsData(int count) {
