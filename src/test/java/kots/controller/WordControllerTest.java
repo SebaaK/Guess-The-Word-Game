@@ -31,8 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest
 public class WordControllerTest {
 
     public static final String MP3_MEDIA_TYPE = "audio/mpeg";
