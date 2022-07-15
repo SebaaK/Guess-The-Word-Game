@@ -23,14 +23,14 @@ import static kots.service.mapper.WordMapper.toWordMetadataDto;
 public class WordService {
 
     private final WordRepository wordRepository;
-    private final WordChecker wordChecker;
+    private final WordManager wordManager;
 
     public WordMetadataDto store(MultipartFile file, String wordName) {
         validateWordNameAvailability(wordName);
         try {
             Word word = Word.builder()
                     .word(wordName)
-                    .difficulty(wordChecker.getDifficulty(wordName))
+                    .difficulty(wordManager.getDifficulty(wordName))
                     .voice(checkIfWordFileExists(file).getBytes())
                     .build();
             return toWordMetadataDto(wordRepository.save(word));

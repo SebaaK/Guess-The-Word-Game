@@ -1,9 +1,9 @@
 package kots.controller;
 
 import kots.controller.dto.ResponseMessageDto;
-import kots.exception.ProcessedFileException;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
+import kots.exception.ProcessedFileException;
 import kots.exception.WordNameAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +37,10 @@ class GlobalHttpErrorHandler {
     @ExceptionHandler(ProcessedFileException.class)
     public ResponseEntity<ResponseMessageDto> handleProcessedFileException(ProcessedFileException exception) {
         return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseMessageDto> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return new ResponseEntity<>(new ResponseMessageDto("This difficulty type no supported"), HttpStatus.CONFLICT);
     }
 }

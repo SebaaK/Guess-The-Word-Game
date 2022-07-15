@@ -1,9 +1,11 @@
 package kots.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -24,6 +27,7 @@ public class Game {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
+    @Setter(AccessLevel.PRIVATE)
     private LocalDateTime started;
     private LocalDateTime finished;
     @Enumerated(EnumType.STRING)
@@ -32,4 +36,9 @@ public class Game {
     private Word word;
     @ManyToOne
     private User user;
+
+    @PrePersist
+    void setupTime() {
+        started = LocalDateTime.now();
+    }
 }

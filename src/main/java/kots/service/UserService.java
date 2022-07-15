@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         return toUserDto(getUser(username));
     }
 
-    private User getUser(String name) {
+    public User getUser(String name) {
         return userRepository.findByName(name)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
     }
