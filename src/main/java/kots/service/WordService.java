@@ -1,11 +1,11 @@
 package kots.service;
 
-import kots.controller.dto.WordFileDownloadDto;
+import kots.controller.dto.WordFileDto;
 import kots.controller.dto.WordMetadataDto;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
 import kots.exception.ProcessedFileException;
-import kots.exception.WordNameIsExistException;
+import kots.exception.WordNameAlreadyExistException;
 import kots.model.Word;
 import kots.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class WordService {
     private final WordChecker wordChecker;
 
     public WordMetadataDto store(MultipartFile file, String wordName) {
-        checkWordNameIsFree(wordName);
+        validateWordNameAvailability(wordName);
         try {
             Word word = Word.builder()
                     .word(wordName)
@@ -43,18 +43,18 @@ public class WordService {
         return toWordMetadataDto(wordRepository.findAll());
     }
 
-    public WordFileDownloadDto getWord(String wordName) {
+    public WordFileDto getWord(String wordName) {
         Word word = getSingleWord(wordName);
-        return new WordFileDownloadDto(word.getWord(), new ByteArrayResource(word.getVoice()));
+        return new WordFileDto(word.getWord(), new ByteArrayResource(word.getVoice()));
     }
 
     public void deleteWord(String wordName) {
         wordRepository.delete(getSingleWord(wordName));
     }
 
-    private void checkWordNameIsFree(String wordName) {
+    private void validateWordNameAvailability(String wordName) {
         if(wordRepository.existsWordByWord(wordName))
-            throw new WordNameIsExistException("That word name is already exist");
+            throw new WordNameAlreadyExistException("That word already exist");
     }
 
     private Word getSingleWord(String wordName) {

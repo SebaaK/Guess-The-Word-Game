@@ -6,7 +6,7 @@ import org.springframework.core.io.Resource;
 
 @Getter
 @AllArgsConstructor
-public class WordFileDownloadDto {
+public class WordFileDto {
 
     private String name;
     private Resource soundFile;

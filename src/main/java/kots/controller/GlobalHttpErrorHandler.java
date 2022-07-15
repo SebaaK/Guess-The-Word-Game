@@ -4,7 +4,7 @@ import kots.controller.dto.ResponseMessageDto;
 import kots.exception.ProcessedFileException;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
-import kots.exception.WordNameIsExistException;
+import kots.exception.WordNameAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,8 +24,8 @@ class GlobalHttpErrorHandler {
         return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(WordNameIsExistException.class)
-    public ResponseEntity<ResponseMessageDto> handleWordNameIsExistException(WordNameIsExistException exception) {
+    @ExceptionHandler(WordNameAlreadyExistException.class)
+    public ResponseEntity<ResponseMessageDto> handleWordNameAlreadyExistException(WordNameAlreadyExistException exception) {
         return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.CONFLICT);
     }
 

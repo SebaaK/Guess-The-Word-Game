@@ -1,6 +1,6 @@
 package kots.controller;
 
-import kots.controller.dto.WordFileDownloadDto;
+import kots.controller.dto.WordFileDto;
 import kots.controller.dto.WordMetadataDto;
 import kots.service.WordService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class WordController {
 
     @GetMapping(value = "/{wordName}", produces = "audio/mpeg")
     public ResponseEntity<Resource> getWordFile(@PathVariable String wordName) {
-        WordFileDownloadDto wordDto = wordService.getWord(wordName);
+        WordFileDto wordDto = wordService.getWord(wordName);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + wordDto.getName() + ".mp3\"")
                 .body(wordDto.getSoundFile());
