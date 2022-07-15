@@ -38,4 +38,9 @@ class GlobalHttpErrorHandler {
     public ResponseEntity<ResponseMessageDto> handleProcessedFileException(ProcessedFileException exception) {
         return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseMessageDto> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return new ResponseEntity<>(new ResponseMessageDto("This difficulty type no supported"), HttpStatus.CONFLICT);
+    }
 }

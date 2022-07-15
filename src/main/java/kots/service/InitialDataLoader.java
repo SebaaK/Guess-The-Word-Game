@@ -29,7 +29,7 @@ class InitialDataLoader {
     private String fileName;
 
     private final WordRepository wordRepository;
-    private final WordChecker wordChecker;
+    private final WordManager wordManager;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
@@ -61,6 +61,6 @@ class InitialDataLoader {
     }
 
     private Word completeEntityToSave(String[] splitRow) {
-        return new Word(Long.parseLong(splitRow[0]), splitRow[1], wordChecker.getDifficulty(splitRow[1]), splitRow[2].getBytes());
+        return new Word(Long.parseLong(splitRow[0]), splitRow[1], wordManager.getDifficulty(splitRow[1]), splitRow[2].getBytes());
     }
 }
