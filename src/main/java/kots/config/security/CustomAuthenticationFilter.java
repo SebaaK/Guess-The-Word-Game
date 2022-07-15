@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequiredArgsConstructor
@@ -39,8 +40,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
         response.setContentType(APPLICATION_JSON_VALUE);
+        String generateToken = jwtManager.generateToken(user);
+        response.setHeader(AUTHORIZATION, generateToken);
         Map<String, String> token = new HashMap<>();
-        token.put("token", jwtManager.generateToken(user));
+        token.put("token", generateToken);
         new ObjectMapper().writeValue(response.getOutputStream(), token);
     }
 }

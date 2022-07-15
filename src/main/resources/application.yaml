@@ -9,6 +9,9 @@ spring:
       ddl-auto: update
   jackson:
     default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
 game:
   difficultyLevelThreshold: 6
