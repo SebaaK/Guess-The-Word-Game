@@ -5,6 +5,7 @@ import kots.model.User;
 import kots.repository.RoleRepository;
 import kots.repository.UserRepository;
 import kots.service.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,10 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SecurityConfigTest {
 
     public static final String WORDS_BASE_ENDPOINT = "/api/words";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -45,7 +46,7 @@ public class SecurityConfigTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @BeforeAll
+    @AfterEach
     void cleanUp() {
         userRepository.deleteAll();
         roleRepository.deleteAll();

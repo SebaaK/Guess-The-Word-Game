@@ -4,6 +4,7 @@ import kots.controller.dto.WordMetadataDto;
 import kots.model.WordDifficulty;
 import kots.repository.WordRepository;
 import kots.service.WordService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class WordControllerTest {
 
     public static final String MP3_MEDIA_TYPE = "audio/mpeg";
@@ -51,7 +51,7 @@ public class WordControllerTest {
     @Autowired
     private WordService wordService;
 
-    @BeforeEach
+    @AfterEach
     void cleanUp() {
         wordRepository.deleteAll();
     }
