@@ -150,7 +150,7 @@ public class WordControllerTest {
                         .param("wordName", TEST_FILE + 1)
                 )
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message", is("That word name is already exist")));
+                .andExpect(jsonPath("$.message", is("That word already exist")));
     }
 
     @Test
