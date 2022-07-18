@@ -66,4 +66,8 @@ public class GameService {
         return gameRepository.findByUserNameAndId(userName, idGame)
                 .orElseThrow(() -> new ObjectNotFoundException("Game not found!"));
     }
+
+    public void deleteGame(String userName, String idGame) {
+        gameRepository.delete(findGame(userName, idGame));
+    }
 }
