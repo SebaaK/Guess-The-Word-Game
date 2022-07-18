@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDateTime;
+
 import static kots.service.mapper.GameMapper.toGameDto;
 
 @Service
@@ -44,9 +46,20 @@ public class GameService {
         String wordName = game.getWord().getName();
         if(wordManager.charIsRightPlaceInWord(wordName, validatedCharGameDto)) {
             game.getFoundChars().set(validatedCharGameDto.getPlaceAt(), validatedCharGameDto.getCharOfWord());
+            checkCharsIsFillComplete(game);
             return toGameDto(game);
         } else
             throw new CharNotValidPlaceException("Char is not valid");
+    }
+
+    private void checkCharsIsFillComplete(Game game) {
+        for(char charOfWord : game.getFoundChars()) {
+            if(charOfWord == '_') {
+                return;
+            }
+        }
+        game.setFinished(LocalDateTime.now());
+        game.setGameStatus(GameStatus.FINISH);
     }
 
     private Game findGame(String userName, String idGame) {
