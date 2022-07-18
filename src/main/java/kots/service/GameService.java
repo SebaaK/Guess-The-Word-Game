@@ -1,6 +1,7 @@
 package kots.service;
 
 import kots.controller.dto.GameUserDto;
+import kots.controller.dto.UserNameAndIdGameDto;
 import kots.controller.dto.ValidatedCharGameDto;
 import kots.exception.CharNotValidPlaceException;
 import kots.exception.ObjectNotFoundException;
@@ -36,13 +37,13 @@ public class GameService {
         return toGameDto(gameRepository.save(game));
     }
 
-    public GameUserDto getGame(String userName, String idGame) {
-        return toGameDto(findGame(userName, idGame));
+    public GameUserDto getGame(UserNameAndIdGameDto userNameAndIdGameDto) {
+        return toGameDto(findGame(userNameAndIdGameDto));
     }
 
     @Transactional
     public GameUserDto validCharPlaceInWord(ValidatedCharGameDto validatedCharGameDto) {
-        Game game = findGame(validatedCharGameDto.getUserName(), validatedCharGameDto.getIdGame());
+        Game game = findGame(UserNameAndIdGameDto.of(validatedCharGameDto.getUserName(), validatedCharGameDto.getIdGame()));
         String wordName = game.getWord().getName();
         if(wordManager.charIsRightPlaceInWord(wordName, validatedCharGameDto)) {
             game.getFoundChars().set(validatedCharGameDto.getPlaceAt(), validatedCharGameDto.getCharOfWord());
@@ -62,12 +63,12 @@ public class GameService {
         game.setGameStatus(GameStatus.FINISH);
     }
 
-    private Game findGame(String userName, String idGame) {
-        return gameRepository.findByUserNameAndId(userName, idGame)
+    private Game findGame(UserNameAndIdGameDto userNameAndIdGameDto) {
+        return gameRepository.findByUserNameAndId(userNameAndIdGameDto.getUserName(), userNameAndIdGameDto.getIdGame())
                 .orElseThrow(() -> new ObjectNotFoundException("Game not found!"));
     }
 
-    public void deleteGame(String userName, String idGame) {
-        gameRepository.delete(findGame(userName, idGame));
+    public void deleteGame(UserNameAndIdGameDto userNameAndIdGameDto) {
+        gameRepository.delete(findGame(userNameAndIdGameDto));
     }
 }

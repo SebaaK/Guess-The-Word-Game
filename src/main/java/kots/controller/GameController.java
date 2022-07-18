@@ -1,6 +1,7 @@
 package kots.controller;
 
 import kots.controller.dto.GameUserDto;
+import kots.controller.dto.UserNameAndIdGameDto;
 import kots.controller.dto.ValidatedCharGameDto;
 import kots.service.GameService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class GameController {
 
     @GetMapping("/{idGame}")
     public ResponseEntity<GameUserDto> getGame(@AuthenticationPrincipal String userName, @PathVariable String idGame) {
-        return ResponseEntity.ok(gameService.getGame(userName, idGame));
+        return ResponseEntity.ok(gameService.getGame(UserNameAndIdGameDto.of(userName, idGame)));
     }
 
     @PostMapping("/{idGame}")
@@ -44,7 +45,7 @@ public class GameController {
 
     @DeleteMapping("/{idGame}")
     public ResponseEntity<?> deleteGame(@AuthenticationPrincipal String userName, @PathVariable String idGame) {
-        gameService.deleteGame(userName, idGame);
+        gameService.deleteGame(UserNameAndIdGameDto.of(userName, idGame));
         return ResponseEntity.noContent().build();
     }
 }
