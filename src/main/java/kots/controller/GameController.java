@@ -1,6 +1,6 @@
 package kots.controller;
 
-import kots.controller.dto.GameDto;
+import kots.controller.dto.GameUserDto;
 import kots.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,8 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping
-    public ResponseEntity<GameDto> createNewGame(@AuthenticationPrincipal String userName,
-                                                 @PathParam("difficulty") String difficulty) {
+    public ResponseEntity<GameUserDto> createNewGame(@AuthenticationPrincipal String userName,
+                                                     @PathParam("difficulty") String difficulty) {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameService.createNewGame(userName, difficulty));
     }
 }

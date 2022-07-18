@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,6 +27,14 @@ public class WordManager {
     public Word getRandomWord(String difficulty) {
         List<Word> wordsByDifficulty = wordRepository.findAllByDifficulty(parseStringToEnum(difficulty));
         return wordsByDifficulty.get(getRandom(wordsByDifficulty.size()));
+    }
+
+    public List<Character> initEmptyFoundCharsList(String word) {
+        List<Character> characterList = new ArrayList<>();
+        for(int i = 0; i < word.length(); i++) {
+            characterList.add('_');
+        }
+        return characterList;
     }
 
     private WordDifficulty parseStringToEnum(String difficulty) {
