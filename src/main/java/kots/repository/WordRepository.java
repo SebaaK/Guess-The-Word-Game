@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface WordRepository extends CrudRepository<Word, Long> {
 
-    Optional<Word> findByWord(String wordName);
-    boolean existsWordByWord(String word);
+    Optional<Word> findByName(String wordName);
+    boolean existsWordByName(String word);
     List<Word> findAllByDifficulty(WordDifficulty difficulty);
 }

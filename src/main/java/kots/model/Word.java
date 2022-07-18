@@ -22,7 +22,7 @@ public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String word;
+    private String name;
     @Enumerated(EnumType.STRING)
     private WordDifficulty difficulty;
     @Lob

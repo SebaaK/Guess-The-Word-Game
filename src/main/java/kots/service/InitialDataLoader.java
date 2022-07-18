@@ -61,6 +61,6 @@ class InitialDataLoader {
     }
 
     private Word completeEntityToSave(String[] splitRow) {
-        return new Word(Long.parseLong(splitRow[0]), splitRow[1], wordManager.getDifficulty(splitRow[1]), splitRow[2].getBytes());
+        return new Word(Long.parseLong(splitRow[0]), splitRow[1].toUpperCase(), wordManager.getDifficulty(splitRow[1]), splitRow[2].getBytes());
     }
 }

@@ -1,6 +1,7 @@
 package kots.controller;
 
 import kots.controller.dto.ResponseMessageDto;
+import kots.exception.CharNotValidPlaceException;
 import kots.exception.NoFileException;
 import kots.exception.ObjectNotFoundException;
 import kots.exception.ProcessedFileException;
@@ -37,6 +38,11 @@ class GlobalHttpErrorHandler {
     @ExceptionHandler(ProcessedFileException.class)
     public ResponseEntity<ResponseMessageDto> handleProcessedFileException(ProcessedFileException exception) {
         return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(CharNotValidPlaceException.class)
+    public ResponseEntity<ResponseMessageDto> handleCharNotValidPlaceException(CharNotValidPlaceException exception) {
+        return new ResponseEntity<>(new ResponseMessageDto(exception.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -133,7 +133,7 @@ public class WordControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.word", is(testWord)))
                 .andExpect(jsonPath("$.difficulty", is(WordDifficulty.HARD.toString())));
-        assertTrue(wordRepository.existsWordByWord(testWord));
+        assertTrue(wordRepository.existsWordByName(testWord));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class WordControllerTest {
         String wordName = TEST_FILE + 1;
         mockMvc.perform(delete(WORDS_BASE_ENDPOINT + wordName))
                 .andExpect(status().isForbidden());
-        assertTrue(wordRepository.existsWordByWord(wordName));
+        assertTrue(wordRepository.existsWordByName(wordName));
     }
 
     @Test
@@ -173,7 +173,7 @@ public class WordControllerTest {
         // when & then
         mockMvc.perform(delete(WORDS_BASE_ENDPOINT + wordName))
                 .andExpect(status().isNoContent());
-        assertFalse(wordRepository.existsWordByWord(wordName));
+        assertFalse(wordRepository.existsWordByName(wordName));
     }
 
     private List<WordMetadataDto> generateWordsData(int count) {

@@ -1,6 +1,7 @@
 package kots.controller;
 
 import kots.controller.dto.GameUserDto;
+import kots.controller.dto.ValidatedCharGameDto;
 import kots.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,5 +31,13 @@ public class GameController {
     @GetMapping("/{idGame}")
     public ResponseEntity<GameUserDto> getGame(@AuthenticationPrincipal String userName, @PathVariable String idGame) {
         return ResponseEntity.ok(gameService.getGame(userName, idGame));
+    }
+
+    @PostMapping("/{idGame}")
+    public ResponseEntity<GameUserDto> validCharPlaceInWord(@AuthenticationPrincipal String userName,
+                                                            @PathVariable String idGame,
+                                                            @PathParam("charOfWord") char charOfWord,
+                                                            @PathParam("placeAt") int placeAt) {
+        return ResponseEntity.ok(gameService.validCharPlaceInWord(ValidatedCharGameDto.of(userName, idGame, charOfWord, placeAt)));
     }
 }

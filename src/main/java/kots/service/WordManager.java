@@ -1,5 +1,6 @@
 package kots.service;
 
+import kots.controller.dto.ValidatedCharGameDto;
 import kots.model.Word;
 import kots.model.WordDifficulty;
 import kots.repository.WordRepository;
@@ -35,6 +36,11 @@ public class WordManager {
             characterList.add('_');
         }
         return characterList;
+    }
+
+    public boolean charIsRightPlaceInWord(String word, ValidatedCharGameDto validatedCharGameDto) {
+        char[] charsOfWord = word.toCharArray();
+        return charsOfWord[validatedCharGameDto.getPlaceAt()] == validatedCharGameDto.getCharOfWord();
     }
 
     private WordDifficulty parseStringToEnum(String difficulty) {

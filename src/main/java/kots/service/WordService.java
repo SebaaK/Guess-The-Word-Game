@@ -29,7 +29,7 @@ public class WordService {
         validateWordNameAvailability(wordName);
         try {
             Word word = Word.builder()
-                    .word(wordName)
+                    .name(wordName)
                     .difficulty(wordManager.getDifficulty(wordName))
                     .voice(checkIfWordFileExists(file).getBytes())
                     .build();
@@ -45,7 +45,7 @@ public class WordService {
 
     public WordFileDto getWord(String wordName) {
         Word word = getSingleWord(wordName);
-        return new WordFileDto(word.getWord(), new ByteArrayResource(word.getVoice()));
+        return new WordFileDto(word.getName(), new ByteArrayResource(word.getVoice()));
     }
 
     public void deleteWord(String wordName) {
@@ -53,12 +53,12 @@ public class WordService {
     }
 
     private void validateWordNameAvailability(String wordName) {
-        if(wordRepository.existsWordByWord(wordName))
+        if(wordRepository.existsWordByName(wordName))
             throw new WordNameAlreadyExistException("That word already exist");
     }
 
     private Word getSingleWord(String wordName) {
-        return wordRepository.findByWord(wordName)
+        return wordRepository.findByName(wordName)
                 .orElseThrow(() -> new ObjectNotFoundException("Word not found"));
     }
 
